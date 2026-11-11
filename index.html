@@ -411,6 +411,17 @@ figure .photo + .ill, .main .photo + .ill{display:none}
 .pay-amounts a:hover{background:var(--bordeaux-dk)}
 .pay-portal{font-family:Montserrat;font-size:13px;font-weight:600;color:var(--bordeaux);text-decoration:none}
 .pay-note{text-align:center;color:var(--muted);font-size:14px;margin-top:22px}
+
+/* Partenaires */
+.partners{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.partner{display:flex;gap:18px;align-items:flex-start;padding:26px;border-radius:14px;background:rgba(255,255,255,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);text-decoration:none;color:inherit;transition:transform .35s,box-shadow .35s}
+.partner:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(31,26,27,.12)}
+.p-mono{flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-family:Montserrat;font-weight:800;font-size:20px;color:#fff;background:var(--bordeaux)}
+.partner h3{font-size:18px;color:var(--ink);margin-bottom:6px}
+.p-tag{display:inline-block;font-family:Montserrat;font-size:12px;font-weight:700;color:var(--bordeaux);background:var(--cream-dk);padding:4px 10px;border-radius:6px;margin-bottom:8px}
+.partner p{font-size:15px;color:var(--muted)}
+.partner.join{border:2px dashed var(--line);background:rgba(255,255,255,.4)}
+.partner.join .p-mono{background:transparent;color:var(--bordeaux);border:2px dashed var(--bordeaux);font-size:28px}
 :root{--bordeaux:#a3274a;--bordeaux-dk:#7f1d39;--bordeaux-lt:#c94f72;--gold:#e08aa3;--gold-lt:#f9dbe4;--cream:#fdf6f8;--cream-dk:#f8e9ee;--night:#2b1520}
 </style>
 </head>
@@ -466,6 +477,7 @@ figure .photo + .ill, .main .photo + .ill{display:none}
         <li><a href="#espace">Notre espace</a></li>
         <li><a href="#fonctionnement">Fonctionnement</a></li>
         <li><a href="#beneficiaires">Bénéficiaires</a></li>
+        <li><a href="#partenaires">Partenaires</a></li>
         <li><a href="#donner">Donner</a></li>
         <li><a href="#agir">Agir</a></li>
         <li><a href="#soutenir">Faire un don</a></li>
@@ -685,6 +697,34 @@ figure .photo + .ill, .main .photo + .ill{display:none}
           <li>Dons de denrées alimentaires pour les orphelinats en Afrique</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTENAIRES -->
+<section id="partenaires">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow">Ils agissent avec nous</span>
+      <h2>Nos <span class="script">partenaires</span></h2>
+      <p>La Rose Solidaire travaille main dans la main avec des associations et des donateurs engagés pour accompagner au mieux les personnes en situation de précarité.</p>
+    </div>
+    <div class="partners">
+      <div class="partner">
+        <span class="p-mono">CR</span>
+        <div><h3>Croix-Rouge française</h3><span class="p-tag">Association partenaire</span>
+        <p>Ensemble, nous orientons et accompagnons les personnes en difficulté vers les aides adaptées.</p></div>
+      </div>
+      <div class="partner">
+        <span class="p-mono">R</span>
+        <div><h3>Redion</h3><span class="p-tag">Donateur régulier</span>
+        <p>Redion soutient le Dressing Box par des dons réguliers qui permettent d'équiper les personnes que nous accompagnons.</p></div>
+      </div>
+      <a class="partner join" data-wa="orientation" href="https://wa.me/33673703846" target="_blank" rel="noopener">
+        <span class="p-mono">+</span>
+        <div><h3>Votre association ?</h3><span class="p-tag">Devenir partenaire</span>
+        <p>Vous accompagnez des personnes en précarité ? Rejoignez notre réseau pour orienter vos bénéficiaires ou récupérer des dons.</p></div>
+      </a>
     </div>
   </div>
 </section>
@@ -925,7 +965,7 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()
 
 (function(){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sel='.sec-head,.tile,.pcard,.stat,.value,.step,.info,.bcard,.group,.acard,.rbox,.point,.gallery figure,.quote,.cta-band,.ccard,.intro,.checks li,.eco,.pay-card';
+  const sel='.sec-head,.tile,.pcard,.stat,.value,.step,.info,.bcard,.group,.acard,.rbox,.point,.gallery figure,.quote,.cta-band,.ccard,.intro,.checks li,.eco,.pay-card,.partner';
   const els=[...document.querySelectorAll(sel)];
   if(!reduce && 'IntersectionObserver' in window){
     els.forEach(el=>{const sib=[...el.parentElement.children].filter(c=>c.matches(sel));el.style.transitionDelay=(Math.min(sib.indexOf(el),6)*80)+'ms';el.classList.add('reveal')});
