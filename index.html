@@ -458,6 +458,20 @@ figure .photo + .ill, .main .photo + .ill{display:none}
   .ev-date{grid-column:2;text-align:left;padding:0 0 6px;display:flex;gap:6px;align-items:baseline}
   .ev-card{grid-column:2}
 }
+
+/* Lecteur musique */
+.music{position:fixed;left:18px;bottom:18px;z-index:90;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(31,26,27,.15);cursor:pointer;font-family:Montserrat;font-weight:700;font-size:13px;color:var(--bordeaux)}
+.music:hover{background:#fff}
+.music.hidden{display:none}
+.eq{display:flex;align-items:flex-end;gap:3px;height:18px;width:22px}
+.eq i{display:block;width:3px;height:4px;border-radius:2px;background:var(--bordeaux)}
+.music.on .eq i{animation:eq 1s ease-in-out infinite}
+.music.on .eq i:nth-child(2){animation-delay:-.4s}.music.on .eq i:nth-child(3){animation-delay:-.7s}.music.on .eq i:nth-child(4){animation-delay:-.2s}
+@keyframes eq{0%,100%{height:4px}50%{height:18px}}
+.music:not(.on) .eq{position:relative}
+.music:not(.on) .eq::after{content:"";position:absolute;left:-2px;top:8px;width:26px;height:2px;background:var(--bordeaux);transform:rotate(-35deg);border-radius:2px}
+@media(max-width:520px){.music-label{display:none}.music{padding:12px}}
+@media (prefers-reduced-motion:reduce){.music.on .eq i{animation:none;height:12px}}
 :root{--bordeaux:#a3274a;--bordeaux-dk:#7f1d39;--bordeaux-lt:#c94f72;--gold:#e08aa3;--gold-lt:#f9dbe4;--cream:#fdf6f8;--cream-dk:#f8e9ee;--night:#2b1520}
 </style>
 </head>
@@ -1039,6 +1053,13 @@ figure .photo + .ill, .main .photo + .ill{display:none}
   </div>
 </div>
 
+<!-- Musique d'ambiance -->
+<audio id="bg-audio" src="musique.mp3" loop preload="metadata"></audio>
+<button class="music" id="music-btn" aria-pressed="false" aria-label="Activer la musique" title="Musique">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="music-label">Musique</span>
+</button>
+
 <script>
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>document.querySelector('nav').classList.remove('open')));
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
@@ -1122,6 +1143,26 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()
     document.querySelectorAll('.ev-filters button').forEach(x=>x.classList.toggle('on',x===b));
     document.querySelectorAll('.ev').forEach(ev=>ev.classList.toggle('hide',b.dataset.f!=='all'&&!ev.dataset.month.startsWith(b.dataset.f)));
   }));
+})();
+
+(function(){
+  const a=document.getElementById('bg-audio'), b=document.getElementById('music-btn');
+  if(!a||!b) return;
+  a.volume=0.35;
+  let pref=null; try{pref=localStorage.getItem('lrs-music')}catch(e){}
+  const set=on=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',on?'Couper la musique':'Activer la musique');b.querySelector('.music-label').textContent=on?'Musique':'Musique coupée'};
+  const play=()=>a.play().then(()=>set(true)).catch(()=>set(false));
+  a.addEventListener('error',()=>b.classList.add('hidden'));
+  b.addEventListener('click',e=>{e.stopPropagation();
+    if(a.paused){play();try{localStorage.setItem('lrs-music','on')}catch(e){}}
+    else{a.pause();set(false);try{localStorage.setItem('lrs-music','off')}catch(e){}}
+  });
+  set(false);
+  if(pref!=='off'){
+    play(); // tentative de lecture automatique (souvent bloquée par le navigateur)
+    const first=()=>{if(a.paused&&pref!=='off')play();['pointerdown','keydown','touchstart'].forEach(t=>removeEventListener(t,first,true))};
+    ['pointerdown','keydown','touchstart'].forEach(t=>addEventListener(t,first,true));
+  }
 })();
 </script>
 </body>
